@@ -6,19 +6,19 @@ class BaseTest < Test::Unit::TestCase
 		@media_rss = SimpleRSS.parse open(File.dirname(__FILE__) + '/../data/media_rss.xml')
 		@atom = SimpleRSS.parse open(File.dirname(__FILE__) + '/../data/atom.xml')
 	end
-	
+
 	def test_channel
 		assert_equal @rss09, @rss09.channel
 		assert_equal @rss20, @rss20.channel
 		assert_equal @atom, @atom.feed
 	end
-	
+
 	def test_items
 		assert_kind_of Array, @rss09.items
 		assert_kind_of Array, @rss20.items
 		assert_kind_of Array, @atom.entries
 	end
-	
+
 	def test_rss09
 		assert_equal 10, @rss09.items.size
 		assert_equal "Slashdot", @rss09.title
@@ -48,7 +48,7 @@ class BaseTest < Test::Unit::TestCase
 		assert_equal "pets frodo", @media_rss.items.first.media_category
 		assert_equal "urn:flickr:tags", @media_rss.items.first.media_category_scheme
 	end
-	
+
 	def test_rss20
 		assert_equal 10, @rss20.items.size
 		assert_equal "Technoblog", @rss20.title
@@ -57,7 +57,7 @@ class BaseTest < Test::Unit::TestCase
 		assert_equal "http://feeds.feedburner.com/rufytech?m=68", @rss20.items.first[:link]
 		assert_equal "This is an XML content feed. It is intended to be viewed in a newsreader or syndicated to another site.", @rss20.channel.feedburner_browserFriendly
 	end
-	
+
 	def test_atom
 		assert_equal 1, @atom.entries.size
 		assert_equal "dive into mark", @atom.title
@@ -65,8 +65,16 @@ class BaseTest < Test::Unit::TestCase
 		assert_equal "http://example.org/2005/04/02/atom", @atom.entries.first.link
 		assert_equal "http://example.org/2005/04/02/atom", @atom.entries.first[:link]
 	end
-	
+
 	def test_bad_feed
 	  assert_raise(SimpleRSSError) { SimpleRSS.parse(open(File.dirname(__FILE__) + '/../data/not-rss.xml')) }
 	end
+
+  def test_multi_category
+    assert_equal "Ruby", @rss20.items.first.category
+    assert_equal 2, @rss20.items.first.categories.size
+    assert_equal true, @rss20.items.first.categories.include?("Programming")
+    assert_equal true, @rss20.items.first.categories.include?("Ruby")
+  end
+
 end
