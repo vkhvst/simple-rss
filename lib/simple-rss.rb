@@ -2,7 +2,7 @@ require 'cgi'
 require 'time'
 
 class SimpleRSS
-  VERSION = "1.3.1"
+  VERSION = "1.3.2"
 
   attr_reader :items, :source
   alias :entries :items
