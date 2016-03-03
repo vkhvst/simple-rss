@@ -1,4 +1,0 @@
-image: paintedfox/ruby
-script:
-  - bundle install
-  - bundle exec rake
